@@ -21,6 +21,6 @@ Our attack is supported by Robust Speech, credit to Raphael Olivier, who made th
 
 4. Once you have a working Wav2Vec2.0 model compatible with robust_speech, which takes a slight training process, you are good to replicate our experiment. 
 
-5. You should place the utils folder inside site-package of your python
+5. You should place the ucontrastive_pgd folder inside site-package of your python 
 
-6. You should replace the pgd attack site-packages/robust_speech/robust_speech/adversarial/attacks/pgd.py with our pgd file. This is a file that contains our new loss function. 
+6. You should replace the pgd attack site-packages/robust_speech/robust_speech/adversarial/attacks/pgd.py with our pgd file within pgd attack folder. This is a file that contains our new loss function. 
