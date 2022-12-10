@@ -1,5 +1,5 @@
 # Contrastive-PGD-Attack
-Contrastive PGD Attack, by Yifu Cai, Hao wang, Yunqing Yu
+Contrastive PGD Attack, by Yifu Cai, Hao Wang, Yunqing Yu
 
 Project Abstract: 
 
