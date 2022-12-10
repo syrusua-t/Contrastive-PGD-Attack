@@ -20,7 +20,7 @@ cd robust_speech
 pip install .
 ```
 
-2. You should also install our requirement.txt, which includes additional package required to run our code.
+2. You should also double check against our requirement.txt and install additional packages required to run our code.
 
 3. You need to create the following root structure and download librispeech dataset to the data folder.
 ```
