@@ -52,9 +52,9 @@ root
 
 3. Before performing the attack, replace pgd.py in ./site-packages/robust_speech/adversarial/attacks with our pdg.py file and add our contrastive_pgd folder to the directory. This change is done to update the old loss function for pgd attack with our new loss function with contrastive learning.
 
-4. You will have to download a Wav2Vec2.0 model yourself following the guideline of robust_speech to generate and evaluate adversial examples. First, we need to load the correct noise-robust model from huggingface. To do this, go to ./robust_speech/recipes/train_configs/LibpriSpeech and add in our wav2vec2-large-robust-ft-swbd-300h.yaml. Second, to generate the attack, go to ./robust_speech/recipes/LibriSpeech/pgd and duplicate w2v2_large_960h.yaml. Rename the duplicated file as my_attack.yaml and change model_name under model information to wav2vec2-large-robust-ft-swbd-300h.
+4. You will have to download a noise-robust Wav2Vec2.0 model yourself following the guideline below. First, we need to load the correct noise-robust model from huggingface. To do this, go to ./robust_speech/recipes/train_configs/LibpriSpeech and add in our wav2vec2-large-robust-ft-swbd-300h.yaml. Second, to generate the attack, go to ./robust_speech/recipes/LibriSpeech/pgd and duplicate w2v2_large_960h.yaml. Rename the duplicated file as my_attack.yaml and change model_name under model information to wav2vec2-large-robust-ft-swbd-300h.
 
-5. Generating the attack for wav2vec2 is quite tricky. The tokenizer for HuggingFace wav2vec2 is not directly compatible to the robust_speech package. Therefore, it is necessary to first generate a tokenizer from the data, then do a slight retraining of the final linear layer in wav2vec2. This can be done with the following command: 
+5. Generating attack for wav2vec2 model can prove to be quite tricky. The tokenizer for HuggingFace wav2vec2 is not directly compatible to the robust_speech package. Therefore, it is necessary to first generate a tokenizer from the data, then do a slight retraining of the final linear layer in wav2vec2. This can be done with the following command: 
 ```
 # in ./recipes/
 
