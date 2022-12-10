@@ -3,7 +3,7 @@ Contrastive PGD Attack, by Yifu Cai, Hao Wang, Yunqing Yu
 
 Project Abstract: 
 
-Modern Automatic Speech Recognition (ASR) architectures often underwent self-supervised learning during the pre-training phase for purpose of learning more robust models with higher accuracy.Previous studies conducted by Raphael Olivier, Hadi Abdullah, and Bhiksha Raj have showcased models pre-trained with self-supervised learning are vulnerable to targeted, transferable adversarial attack[ 5]. This discovery raises alarm among the science community and shall be dealt with before such ASR models are put into production.
+Modern Automatic Speech Recognition (ASR) architectures often underwent self-supervised learning during the pre-training phase for purpose of learning more robust models with higher accuracy.Previous studies conducted by Raphael Olivier, Hadi Abdullah, and Bhiksha Raj have showcased models pre-trained with self-supervised learning are vulnerable to targeted, transferable adversarial attack. This discovery raises alarm among the science community and shall be dealt with before such ASR models are put into production.
 
 In the current literature, the experiments are either not conducted under an over-the-air setting, where crafted audio samples are directly fed into the ASR models without external noise, or conducted under an over-the-air setting but assuming a white-box attack, meaning that the target model is known when generating the adversarial examples. Therefore, further research on whether the same, transferable adversarial attack on ASR models remain effective under an over-the-air setting through zero knowledge of the attacked model is necessary. To the best of our knowledge, no previous research has been conducted on this topic, so we decide to further this investigation through this research.
 
@@ -65,3 +65,7 @@ python evaluate.py attack_configs/LibriSpeech/pgd/my_attack.yaml --root=/path/to
 ```
 
 6. With the attack generated, you can directly use the Hosted inference API for Data2Vec on https://huggingface.co/facebook/data2vec-audio-large-960h to evaluate the effectiveness of the attack.
+
+Run Time
+
+We ran the project on AWS, G4DN xlarge, which are NVIDIA T4 GPUs. 
