@@ -6,7 +6,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import copy
-from colorprint import cprint
 import contrastive_pgd as cp
 
 import robust_speech as rs
@@ -46,7 +45,6 @@ def pgd_loop(
 ):
     """
     Iteratively maximize the loss over the input.
-
     Arguments
     ---------
     asr_brain: rs.adversarial.brain.ASRBrain
@@ -72,8 +70,6 @@ def pgd_loop(
           - if None, then perform regular L1 projection.
           - if float value, then perform sparse L1 descent from
           Algorithm 1 in https://arxiv.org/pdf/1904.13000v1.pdf
-
-
     Returns
     -------
     tensor containing the perturbed input.
@@ -86,6 +82,7 @@ def pgd_loop(
     # DEBUG ONLY : tokens
     # if prev_batch is not None:
     #     cprint.cprint(f"prev_batch token:{prev_batch.tokens}")
+    file = None
     wav_init, wav_lens = batch.sig
     if delta_init is not None:
         delta = delta_init
@@ -145,14 +142,13 @@ def pgd_loop(
         ###########################################
         #compute loss
         if prev_batch is not None:
-            print(f"original_loss: {loss}, rir_loss: {loss_rir}, contrastive_loss: {loss_contrastive}")
             file = open('/home/ubuntu/robust_speech/loss.txt', 'a')
             # file.write(f"original_loss: {loss}, rir_loss: {loss_rir}, contrastive_loss: {loss_contrastive}\n")
             loss.backward(retain_graph=True)
             loss_rir.backward(retain_graph=True)
             loss_contrastive.backward(retain_graph=True)
             calc_loss = loss +loss_contrastive +loss_rir
-            file.write(f'{calc_loss}\n')
+            file.write(f"{loss}\t{loss_rir}\t{loss_contrastive}\t{calc_loss}\n")
         else:
             cp.cprint("no prev_batch")
             if minimize:
@@ -192,6 +188,8 @@ def pgd_loop(
 
         if skip:
             break
+    if file is not None:
+        file.write('\n')
 
     if isinstance(eps_iter, torch.Tensor):
         eps_iter = eps_iter.squeeze(1)
@@ -215,7 +213,6 @@ def pgd_loop_with_return_delta(
 ):
     """
     Iteratively maximize the loss over the input.
-
     Arguments
     ---------
     asr_brain: rs.adversarial.brain.ASRBrain
@@ -241,8 +238,6 @@ def pgd_loop_with_return_delta(
           - if None, then perform regular L1 projection.
           - if float value, then perform sparse L1 descent from
           Algorithm 1 in https://arxiv.org/pdf/1904.13000v1.pdf
-
-
     Returns
     -------
     tensor containing the perturbed input.
@@ -326,7 +321,6 @@ class ASRPGDAttack(Attacker):
     Implementation of the PGD attack (https://arxiv.org/abs/1706.06083)
     The attack performs nb_iter steps of size eps_iter, while always staying
     within eps from the initial point.
-
     Arguments
     ---------
     asr_brain: rs.adversarial.brain.ASRBrain
@@ -392,12 +386,10 @@ class ASRPGDAttack(Attacker):
     def perturb(self, batch):
         """
         Compute an adversarial perturbation
-
         Arguments
         ---------
         batch : sb.PaddedBatch
            The input batch to perturb
-
         Returns
         -------
         the tensor of the perturbed batch
@@ -463,12 +455,10 @@ class ASRPGDAttack(Attacker):
         """
         Compute an adversarial perturbation 
         and return the perturbated vectors
-
         Arguments
         ---------
         batch : sb.PaddedBatch
            The input batch to perturb
-
         Returns
         -------
         the tensor of the perturbed batch
@@ -648,7 +638,6 @@ class ASRLinfPGDAttack(ASRPGDAttack):
 class SNRPGDAttack(ASRL2PGDAttack):
     """
     PGD Attack with order=L2, bounded with Signal-Noise Ratio instead of L2 norm
-
     Arguments
     ---------
     asr_brain: rs.adversarial.brain.ASRBrain
@@ -700,12 +689,10 @@ class SNRPGDAttack(ASRL2PGDAttack):
     def perturb(self, batch):
         """
         Compute an adversarial perturbation
-
         Arguments
         ---------
         batch : sb.PaddedBatch
            The input batch to perturb
-
         Returns
         -------
         the tensor of the perturbed batch
@@ -722,12 +709,10 @@ class SNRPGDAttack(ASRL2PGDAttack):
         """
         Compute an adversarial perturbation 
         and return the perturbated vectors
-
         Arguments
         ---------
         batch : sb.PaddedBatch
            The input batch to perturb
-
         Returns
         -------
         the tensor of the perturbed batch
@@ -805,7 +790,6 @@ class SNRPGDAttack(ASRL2PGDAttack):
 class MaxSNRPGDAttack(ASRLinfPGDAttack):
     """
     PGD Attack with order=Linf, bounded with the Max Signal-Noise Ratio instead of Linf norm
-
     Arguments
     ---------
     asr_brain: rs.adversarial.brain.ASRBrain
@@ -857,12 +841,10 @@ class MaxSNRPGDAttack(ASRLinfPGDAttack):
     def perturb(self, batch):
         """
         Compute an adversarial perturbation
-
         Arguments
         ---------
         batch : sb.PaddedBatch
            The input batch to perturb
-
         Returns
         -------
         the tensor of the perturbed batch
